@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ozokw/OneDrive/Desktop/Form/AuthForm/app/%28auth%29/layout.tsx"],"sourcesContent":["import type { ReactNode } from 'react';\r\n\r\nexport default function AuthLayout({ children }: { children: ReactNode }) {\r\n  return <section>{children}</section>;\r\n}\r\n"],"names":[],"mappings":";;;;;;AAEe,SAAS,WAAW,EAAE,QAAQ,EAA2B;IACtE,qBAAO,8OAAC;kBAAS;;;;;;AACnB"}}]
+}

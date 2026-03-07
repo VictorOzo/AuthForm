@@ -1,0 +1,36 @@
+{
+  "name": "authform",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorOzo/AuthForm.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VictorOzo/AuthForm/issues"
+  },
+  "homepage": "https://github.com/VictorOzo/AuthForm#readme",
+  "description": "",
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "25.3.5",
+    "@types/react": "19.2.14",
+    "typescript": "5.9.3"
+  }
+}
