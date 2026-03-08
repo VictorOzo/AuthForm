@@ -1,0 +1,262 @@
+.page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1rem;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 0%, rgba(14, 165, 233, 0.15), transparent 35%),
+    linear-gradient(180deg, #f7f8ff 0%, #eef2ff 100%);
+}
+
+.card {
+  width: min(100%, 27rem);
+  padding: 2rem;
+  border-radius: 1.125rem;
+  border: 1px solid #dbe3ff;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.12);
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  margin: 0;
+  color: #0f172a;
+  font-size: clamp(1.6rem, 4.5vw, 1.95rem);
+  line-height: 1.15;
+}
+
+.subtitle {
+  margin: 0.5rem 0 0;
+  color: #334155;
+  font-size: 0.98rem;
+}
+
+.form {
+  display: grid;
+  gap: 1rem;
+}
+
+.formError {
+  margin: 0 0 1rem;
+  padding: 0.75rem 0.875rem;
+  border-radius: 0.75rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 0.92rem;
+}
+
+.fieldGroup {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.label {
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.72rem 0.84rem;
+  font-size: 0.98rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.input::placeholder {
+  color: #64748b;
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.22);
+}
+
+.input[aria-invalid='true'] {
+  border-color: #dc2626;
+}
+
+.passwordInputWrap {
+  position: relative;
+}
+
+.passwordInputWrap .input {
+  padding-right: 4.25rem;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #4338ca;
+  font-weight: 600;
+  font-size: 0.86rem;
+  padding: 0.3rem 0.4rem;
+  border-radius: 0.45rem;
+  cursor: pointer;
+}
+
+.passwordToggle:focus-visible,
+.textLink:focus-visible,
+.checkbox:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.28);
+  outline-offset: 2px;
+}
+
+.fieldError {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.86rem;
+}
+
+.metaRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.85rem;
+  margin-top: 0.1rem;
+}
+
+.checkboxLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: #334155;
+  font-size: 0.92rem;
+}
+
+.checkbox {
+  width: 1rem;
+  height: 1rem;
+  accent-color: #4f46e5;
+}
+
+.textLink {
+  color: #4338ca;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.textLink:hover {
+  text-decoration: underline;
+}
+
+.primaryButton,
+.secondaryButton {
+  width: 100%;
+  border-radius: 0.78rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 100ms ease, background-color 130ms ease, box-shadow 130ms ease;
+}
+
+.primaryButton {
+  border: 1px solid #3730a3;
+  background: linear-gradient(180deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff;
+  padding: 0.76rem 1rem;
+  box-shadow: 0 8px 24px rgba(67, 56, 202, 0.25);
+}
+
+.primaryButton:hover {
+  transform: translateY(-1px);
+}
+
+.primaryButton:active {
+  transform: translateY(0);
+}
+
+.primaryButton:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.25);
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 0.25rem 0;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #dbe3f4;
+}
+
+.divider span {
+  position: relative;
+  z-index: 1;
+  padding: 0 0.6rem;
+  background: #ffffff;
+  color: #475569;
+  font-size: 0.86rem;
+}
+
+.secondaryButton {
+  border: 1px solid #cbd5e1;
+  background: #ffffff;
+  color: #1e293b;
+  padding: 0.72rem 1rem;
+}
+
+.secondaryButton:hover {
+  background: #f8fafc;
+}
+
+.secondaryButton:active {
+  background: #f1f5f9;
+}
+
+.footerText {
+  margin: 1.3rem 0 0;
+  color: #334155;
+  font-size: 0.93rem;
+  text-align: center;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 540px) {
+  .card {
+    padding: 1.4rem;
+    border-radius: 1rem;
+  }
+
+  .metaRow {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
