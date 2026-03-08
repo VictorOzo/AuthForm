@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 14, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ozokw/OneDrive/Desktop/Form/AuthForm/app/page.tsx"],"sourcesContent":["export default function HomePage() {\r\n  return (\r\n    <main style={{ padding: 24 }}>\r\n      <h1>AuthForm</h1>\r\n      <ul>\r\n        <li>\r\n          <a href=\"/signup\">Signup</a>\r\n        </li>\r\n        <li>\r\n          <a href=\"/login\">Login</a>\r\n        </li>\r\n        <li>\r\n          <a href=\"/dashboard\">Dashboard</a>\r\n        </li>\r\n      </ul>\r\n    </main>\r\n  );\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAK,OAAO;YAAE,SAAS;QAAG;;0BACzB,8OAAC;0BAAG;;;;;;0BACJ,8OAAC;;kCACC,8OAAC;kCACC,cAAA,8OAAC;4BAAE,MAAK;sCAAU;;;;;;;;;;;kCAEpB,8OAAC;kCACC,cAAA,8OAAC;4BAAE,MAAK;sCAAS;;;;;;;;;;;kCAEnB,8OAAC;kCACC,cAAA,8OAAC;4BAAE,MAAK;sCAAa;;;;;;;;;;;;;;;;;;;;;;;AAK/B"}}]
-}

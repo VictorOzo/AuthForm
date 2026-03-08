@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.ts"],"sourcesContent":["import type { NextRequest } from 'next/server';\r\nimport { NextResponse } from 'next/server';\r\n\r\nexport function middleware(_request: NextRequest) {\r\n  // TODO: implement auth gate / redirects\r\n  return NextResponse.next();\r\n}\r\n\r\nexport const config = {\r\n  matcher: ['/dashboard/:path*', '/profile/:path*', '/settings/:path*', '/login', '/signup'],\r\n};\r\n"],"names":[],"mappings":";;;;;;AACA;AAAA;;AAEO,SAAS,WAAW,QAAqB;IAC9C,wCAAwC;IACxC,OAAO,gMAAY,CAAC,IAAI;AAC1B;AAEO,MAAM,SAAS;IACpB,SAAS;QAAC;QAAqB;QAAmB;QAAoB;QAAU;KAAU;AAC5F"}}]
-}

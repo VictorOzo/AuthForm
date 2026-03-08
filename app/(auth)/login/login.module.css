@@ -1,3 +1,5 @@
+
+
 .page {
   min-height: 100vh;
   display: grid;
@@ -53,6 +55,7 @@
 .fieldGroup {
   display: grid;
   gap: 0.45rem;
+  width: 100%;
 }
 
 .label {

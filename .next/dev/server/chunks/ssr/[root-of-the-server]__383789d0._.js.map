@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 18, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/ozokw/OneDrive/Desktop/Form/AuthForm/app/%28auth%29/signup/page.tsx"],"sourcesContent":["export default function SignupPage() {\r\n  return <main>Signup</main>;\r\n}\r\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBAAO,8OAAC;kBAAK;;;;;;AACf"}}]
-}

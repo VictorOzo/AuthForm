@@ -86,7 +86,7 @@ export default function LoginPage() {
   };
 
   return (
-    <main className={styles.page}>
+    <main className={styles.page} suppressHydrationWarning>
       <section className={styles.card} aria-labelledby="login-title">
         <header className={styles.header}>
           <h1 id="login-title" className={styles.title}>
@@ -115,7 +115,7 @@ export default function LoginPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? 'email-error' : undefined}
+              aria-describedby={errors.email ? "email-error" : undefined}
             />
             {errors.email ? (
               <p id="email-error" className={styles.fieldError} role="alert">
@@ -132,21 +132,22 @@ export default function LoginPage() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? 'text' : 'password'}
+                type={showPassword ? "text" : "password"}
                 autoComplete="current-password"
                 className={styles.input}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 aria-invalid={Boolean(errors.password)}
-                aria-describedby={errors.password ? 'password-error' : undefined}
+                aria-describedby={
+                  errors.password ? "password-error" : undefined
+                }
               />
               <button
                 type="button"
                 className={styles.passwordToggle}
                 onClick={() => setShowPassword((current) => !current)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
-              >
-                {showPassword ? 'Hide' : 'Show'}
+                aria-label={showPassword ? "Hide password" : "Show password"}>
+                {showPassword ? "Hide" : "Show"}
               </button>
             </div>
             {errors.password ? (
@@ -171,8 +172,11 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <button type="submit" className={styles.primaryButton} disabled={isSubmitting}>
-            {isSubmitting ? 'Logging in...' : 'Log in'}
+          <button
+            type="submit"
+            className={styles.primaryButton}
+            disabled={isSubmitting}>
+            {isSubmitting ? "Logging in..." : "Log in"}
           </button>
 
           <div className={styles.divider}>
@@ -185,7 +189,7 @@ export default function LoginPage() {
         </form>
 
         <p className={styles.footerText}>
-          Don&apos;t have an account?{' '}
+          Don&apos;t have an account?{" "}
           <Link href="/signup" className={styles.textLink}>
             Sign up
           </Link>
