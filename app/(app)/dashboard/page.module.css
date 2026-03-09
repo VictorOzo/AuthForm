@@ -1,0 +1,45 @@
+.container {
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.9rem;
+  box-shadow: 0 4px 18px rgba(17, 24, 39, 0.06);
+  padding: 1.25rem;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.subtitle {
+  margin: 0.4rem 0 0;
+  color: #4b5563;
+}
+
+.sectionTitle {
+  margin-top: 0;
+  color: #111827;
+}
+
+.summary {
+  margin: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.summary dt {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.summary dd {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+  color: #111827;
+}

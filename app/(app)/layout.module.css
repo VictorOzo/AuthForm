@@ -1,0 +1,133 @@
+.appShell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+  background: #f5f7fb;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.brand {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #374151;
+  font-weight: 500;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.6rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  background: #f3f4f6;
+  color: #111827;
+  outline: none;
+}
+
+.active {
+  background: #eef2ff;
+  color: #3730a3;
+}
+
+.logoutButton {
+  margin-top: auto;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #b91c1c;
+  border-radius: 0.6rem;
+  padding: 0.7rem 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.logoutButton:hover,
+.logoutButton:focus-visible {
+  background: #fef2f2;
+  outline: none;
+}
+
+.mainColumn {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  border-bottom: 1px solid #e5e7eb;
+  background: #ffffff;
+  padding: 0.8rem 1.25rem;
+}
+
+.userInfo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatar,
+.avatarFallback {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.userName {
+  margin: 0;
+  font-weight: 600;
+  color: #111827;
+}
+
+.content {
+  padding: 1.25rem;
+}
+
+@media (max-width: 860px) {
+  .appShell {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .logoutButton {
+    margin-top: 0.5rem;
+  }
+}

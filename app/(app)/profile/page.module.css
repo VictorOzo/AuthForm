@@ -1,0 +1,67 @@
+.card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.9rem;
+  box-shadow: 0 4px 18px rgba(17, 24, 39, 0.06);
+  padding: 1.25rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.avatar,
+.avatarFallback {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 999px;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-weight: 700;
+}
+
+.title {
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0.2rem 0 0;
+  color: #6b7280;
+}
+
+.grid {
+  margin: 1.2rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.grid dt {
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.grid dd {
+  margin: 0.2rem 0 0;
+  color: #111827;
+  font-weight: 600;
+}
+
+.debug {
+  margin: 0;
+  background: #111827;
+  color: #f9fafb;
+  padding: 0.9rem;
+  border-radius: 0.65rem;
+  font-size: 0.82rem;
+  overflow: auto;
+}
