@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '../../../src/store/hooks';
+import { meThunk } from '../../../src/store/authSlice';
 import styles from './login.module.css';
 
 type FormErrors = {
@@ -14,6 +16,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function LoginPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,6 +57,7 @@ export default function LoginPage() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           email: email.trim(),
           password,
@@ -62,22 +66,14 @@ export default function LoginPage() {
       });
 
       if (!response.ok) {
-        let message = 'Unable to log in with those credentials. Please try again.';
-
-        try {
-          const data = (await response.json()) as { message?: string };
-          if (data?.message) {
-            message = data.message;
-          }
-        } catch {
-          // Fallback message already set.
-        }
-
-        setFormError(message);
+        const data = (await response.json().catch(() => ({}))) as { message?: string };
+        setFormError(data.message ?? 'Unable to log in with those credentials. Please try again.');
         return;
       }
 
-      router.push('/dashboard');
+      await dispatch(meThunk());
+      const nextPath = new URLSearchParams(window.location.search).get('next') || '/dashboard';
+      router.push(nextPath);
     } catch {
       setFormError('Something went wrong. Please check your connection and try again.');
     } finally {
@@ -115,7 +111,7 @@ export default function LoginPage() {
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               aria-invalid={Boolean(errors.email)}
-              aria-describedby={errors.email ? "email-error" : undefined}
+              aria-describedby={errors.email ? 'email-error' : undefined}
             />
             {errors.email ? (
               <p id="email-error" className={styles.fieldError} role="alert">
@@ -132,22 +128,16 @@ export default function LoginPage() {
               <input
                 id="password"
                 name="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 autoComplete="current-password"
                 className={styles.input}
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 aria-invalid={Boolean(errors.password)}
-                aria-describedby={
-                  errors.password ? "password-error" : undefined
-                }
+                aria-describedby={errors.password ? 'password-error' : undefined}
               />
-              <button
-                type="button"
-                className={styles.passwordToggle}
-                onClick={() => setShowPassword((current) => !current)}
-                aria-label={showPassword ? "Hide password" : "Show password"}>
-                {showPassword ? "Hide" : "Show"}
+              <button type="button" className={styles.passwordToggle} onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
             {errors.password ? (
@@ -159,12 +149,7 @@ export default function LoginPage() {
 
           <div className={styles.metaRow}>
             <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(event) => setRememberMe(event.target.checked)}
-                className={styles.checkbox}
-              />
+              <input type="checkbox" checked={rememberMe} onChange={(event) => setRememberMe(event.target.checked)} className={styles.checkbox} />
               <span>Remember me</span>
             </label>
             <Link href="/forgot-password" className={styles.textLink}>
@@ -172,11 +157,8 @@ export default function LoginPage() {
             </Link>
           </div>
 
-          <button
-            type="submit"
-            className={styles.primaryButton}
-            disabled={isSubmitting}>
-            {isSubmitting ? "Logging in..." : "Log in"}
+          <button type="submit" className={styles.primaryButton} disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Log in'}
           </button>
 
           <div className={styles.divider}>
@@ -189,10 +171,7 @@ export default function LoginPage() {
         </form>
 
         <p className={styles.footerText}>
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className={styles.textLink}>
-            Sign up
-          </Link>
+          Don&apos;t have an account? <Link href="/signup" className={styles.textLink}>Sign up</Link>
         </p>
       </section>
     </main>

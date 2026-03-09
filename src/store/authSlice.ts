@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-type AuthUser = {
+export type AuthUser = {
   id?: string;
   firstName?: string;
   lastName?: string;
@@ -9,7 +9,7 @@ type AuthUser = {
   avatarUrl?: string;
 };
 
-export type AuthState = {
+type AuthState = {
   user: AuthUser | null;
   status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: string | null;
@@ -21,61 +21,74 @@ const initialState: AuthState = {
   error: null,
 };
 
-export const loginThunk = createAsyncThunk<AuthUser>('auth/login', async () => {
-  const response = await fetch('/api/auth/login', { method: 'POST' });
-  if (!response.ok) throw new Error('Login failed');
-  return {
-    firstName: 'Demo',
-    lastName: 'User',
-    email: 'demo@example.com',
-    username: 'demo-user',
-  };
-});
-
-export const signupThunk = createAsyncThunk<AuthUser>('auth/signup', async () => {
-  const response = await fetch('/api/auth/signup', { method: 'POST' });
-  if (!response.ok) throw new Error('Signup failed');
-  return {
-    firstName: 'New',
-    lastName: 'User',
-    email: 'new@example.com',
-    username: 'new-user',
-  };
-});
-
-export const meThunk = createAsyncThunk<AuthUser>('auth/me', async () => {
-  const response = await fetch('/api/auth/me');
-  if (!response.ok) throw new Error('Session lookup failed');
-  const data = await response.json();
-  return data.user ?? {
-    firstName: 'Demo',
-    lastName: 'User',
-    email: 'demo@example.com',
-    username: 'demo-user',
-  };
-});
-
-export const updateProfileThunk = createAsyncThunk<AuthUser, Partial<AuthUser>>(
-  'auth/updateProfile',
-  async (payload) => {
-    const response = await fetch('/api/user/profile', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    if (!response.ok) throw new Error('Profile update failed');
-
-    return payload;
+export const meThunk = createAsyncThunk<AuthUser, void, { rejectValue: string }>(
+  'auth/me',
+  async (_, { rejectWithValue }) => {
+    const response = await fetch('/api/auth/me', { credentials: 'include' });
+    if (!response.ok) {
+      return rejectWithValue('Session lookup failed');
+    }
+    const data = (await response.json()) as { user?: AuthUser };
+    if (!data.user) return rejectWithValue('Session lookup failed');
+    return data.user;
   },
 );
 
-export const logoutThunk = createAsyncThunk<void>('auth/logout', async () => {
-  const response = await fetch('/api/auth/logout', { method: 'POST' });
-  if (!response.ok) throw new Error('Logout failed');
-});
+export const logoutThunk = createAsyncThunk<void, void, { rejectValue: string }>(
+  'auth/logout',
+  async (_, { rejectWithValue }) => {
+    const response = await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+    if (!response.ok) {
+      return rejectWithValue('Logout failed');
+    }
+  },
+);
 
-export const fetchMeThunk = meThunk;
+export const updateProfileThunk = createAsyncThunk<AuthUser, Partial<AuthUser>, { rejectValue: string }>(
+  'auth/updateProfile',
+  async (payload, { rejectWithValue }) => {
+    const response = await fetch('/api/user/profile', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      return rejectWithValue('Profile update failed');
+    }
+
+    const data = (await response.json()) as { user?: AuthUser };
+    return data.user ?? payload;
+  },
+);
+
+export const uploadAvatarThunk = createAsyncThunk<
+  { avatarUrl?: string; user?: AuthUser },
+  File,
+  { rejectValue: string }
+>('auth/uploadAvatar', async (file, { rejectWithValue }) => {
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  const response = await fetch('/api/user/avatar', {
+    method: 'POST',
+    body: formData,
+    credentials: 'include',
+  });
+
+  const data = (await response.json().catch(() => ({}))) as {
+    avatarUrl?: string;
+    user?: AuthUser;
+    message?: string;
+  };
+
+  if (!response.ok) {
+    return rejectWithValue(data.message ?? 'Avatar upload failed');
+  }
+
+  return { avatarUrl: data.avatarUrl, user: data.user };
+});
 
 const authSlice = createSlice({
   name: 'auth',
@@ -87,40 +100,22 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginThunk.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(loginThunk.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload;
-      })
-      .addCase(loginThunk.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message ?? 'Login failed';
-      })
-      .addCase(signupThunk.pending, (state) => {
-        state.status = 'loading';
-      })
-      .addCase(signupThunk.fulfilled, (state, action) => {
-        state.status = 'succeeded';
-        state.user = action.payload;
-      })
-      .addCase(signupThunk.rejected, (state, action) => {
-        state.status = 'failed';
-        state.error = action.error.message ?? 'Signup failed';
-      })
       .addCase(meThunk.pending, (state) => {
         state.status = 'loading';
+        state.error = null;
       })
       .addCase(meThunk.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.user = action.payload;
       })
-      .addCase(meThunk.rejected, (state) => {
+      .addCase(meThunk.rejected, (state, action) => {
         state.status = 'idle';
+        state.user = null;
+        state.error = action.payload ?? null;
       })
       .addCase(updateProfileThunk.pending, (state) => {
         state.status = 'loading';
+        state.error = null;
       })
       .addCase(updateProfileThunk.fulfilled, (state, action) => {
         state.status = 'succeeded';
@@ -131,11 +126,31 @@ const authSlice = createSlice({
       })
       .addCase(updateProfileThunk.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message ?? 'Profile update failed';
+        state.error = action.payload ?? 'Profile update failed';
+      })
+      .addCase(uploadAvatarThunk.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(uploadAvatarThunk.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        if (action.payload.user) {
+          state.user = action.payload.user;
+        } else if (action.payload.avatarUrl) {
+          state.user = {
+            ...state.user,
+            avatarUrl: action.payload.avatarUrl,
+          };
+        }
+      })
+      .addCase(uploadAvatarThunk.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload ?? 'Avatar upload failed';
       })
       .addCase(logoutThunk.fulfilled, (state) => {
         state.status = 'idle';
         state.user = null;
+        state.error = null;
       });
   },
 });
