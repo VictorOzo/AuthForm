@@ -1,17 +1,9 @@
 'use client';
 
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react';
+import { updateProfileThunk, uploadAvatarThunk } from '../../../src/store/authSlice';
 import { useAppDispatch, useAppSelector } from '../../../src/store/hooks';
-import { meThunk, updateProfileThunk } from '../../../src/store/authSlice';
 import styles from './page.module.css';
-
-type AppUser = {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  username?: string;
-  avatarUrl?: string;
-};
 
 type FormErrors = {
   firstName?: string;
@@ -19,14 +11,13 @@ type FormErrors = {
   username?: string;
 };
 
-function getInitials(user: AppUser | null) {
-  if (!user) return 'U';
-  return `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`.trim() || user.username?.[0] || 'U';
+function getInitials(firstName?: string, lastName?: string, username?: string) {
+  return `${firstName?.[0] ?? ''}${lastName?.[0] ?? ''}`.trim() || username?.[0] || 'U';
 }
 
 export default function SettingsPage() {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user as AppUser | null);
+  const user = useAppSelector((state) => state.auth.user);
   const status = useAppSelector((state) => state.auth.status);
 
   const [firstName, setFirstName] = useState('');
@@ -35,7 +26,7 @@ export default function SettingsPage() {
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [uploadMessage, setUploadMessage] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   useEffect(() => {
     setFirstName(user?.firstName ?? '');
@@ -48,12 +39,15 @@ export default function SettingsPage() {
       setPreviewUrl(null);
       return;
     }
+
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreviewUrl(objectUrl);
+
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedFile]);
 
   const avatarSrc = useMemo(() => previewUrl || user?.avatarUrl || null, [previewUrl, user?.avatarUrl]);
+  const isUploading = status === 'loading';
 
   const validate = () => {
     const nextErrors: FormErrors = {};
@@ -78,32 +72,24 @@ export default function SettingsPage() {
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setUploadMessage(null);
-    const file = event.target.files?.[0] ?? null;
-    setSelectedFile(file);
+    setUploadError(null);
+    setSelectedFile(event.target.files?.[0] ?? null);
   };
 
   const handleAvatarUpload = async () => {
     if (!selectedFile) {
-      setUploadMessage('Please select an image first.');
+      setUploadError('Please select an image first.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('avatar', selectedFile);
-
-    const response = await fetch('/api/user/avatar', {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      setUploadMessage('Upload failed. Please try again.');
+    const result = await dispatch(uploadAvatarThunk(selectedFile));
+    if (uploadAvatarThunk.rejected.match(result)) {
+      setUploadError(result.payload ?? 'Upload failed. Please try again.');
       return;
     }
 
-    setUploadMessage('Avatar uploaded (demo mode). Refreshing profile...');
-    await dispatch(meThunk());
+    setSelectedFile(null);
+    setUploadError(null);
   };
 
   return (
@@ -114,34 +100,19 @@ export default function SettingsPage() {
         <form className={styles.form} onSubmit={handleSave} noValidate>
           <div className={styles.field}>
             <label htmlFor="firstName">First name</label>
-            <input
-              id="firstName"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              aria-invalid={Boolean(errors.firstName)}
-            />
+            <input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} aria-invalid={Boolean(errors.firstName)} />
             <p className={styles.error}>{errors.firstName || '\u00a0'}</p>
           </div>
 
           <div className={styles.field}>
             <label htmlFor="lastName">Last name</label>
-            <input
-              id="lastName"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              aria-invalid={Boolean(errors.lastName)}
-            />
+            <input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} aria-invalid={Boolean(errors.lastName)} />
             <p className={styles.error}>{errors.lastName || '\u00a0'}</p>
           </div>
 
           <div className={styles.field}>
             <label htmlFor="username">Username</label>
-            <input
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              aria-invalid={Boolean(errors.username)}
-            />
+            <input id="username" value={username} onChange={(e) => setUsername(e.target.value)} aria-invalid={Boolean(errors.username)} />
             <p className={styles.error}>{errors.username || '\u00a0'}</p>
           </div>
 
@@ -157,16 +128,22 @@ export default function SettingsPage() {
           {avatarSrc ? (
             <img src={avatarSrc} alt="Avatar preview" className={styles.avatar} />
           ) : (
-            <div className={styles.avatarFallback}>{getInitials(user)}</div>
+            <div className={styles.avatarFallback}>{getInitials(user?.firstName, user?.lastName, user?.username)}</div>
           )}
 
           <div className={styles.avatarControls}>
             <label htmlFor="avatar">Select avatar image</label>
             <input id="avatar" type="file" accept="image/*" onChange={handleFileChange} />
-            <button type="button" onClick={handleAvatarUpload} className={styles.uploadButton}>
-              Upload avatar
+            <button type="button" onClick={handleAvatarUpload} className={styles.uploadButton} disabled={isUploading}>
+              {isUploading ? 'Uploading...' : 'Upload avatar'}
             </button>
-            <p className={styles.helpText}>{uploadMessage || 'TODO: Wire server-side persistence for avatar files.'}</p>
+            {uploadError ? (
+              <p className={styles.error} role="alert">
+                {uploadError}
+              </p>
+            ) : (
+              <p className={styles.helpText}>Upload an image to update your navbar avatar instantly.</p>
+            )}
           </div>
         </div>
       </article>
